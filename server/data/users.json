@@ -1,0 +1,35 @@
+[
+  {
+    "id": "defe9468-3145-4106-abfb-585d134a0789",
+    "username": "admin",
+    "password": "$2a$10$FWFQAXtKwRh1u1skLyayTef4x8hu3ztr.WnzBrxOE.vKg8tjj0Uoy",
+    "firstname": "Admin",
+    "role": "owner",
+    "hasLicense": true,
+    "created": "2026-01-21T16:41:42.444Z",
+    "lastActivity": "2026-01-21T18:09:47.319Z",
+    "ip": "127.0.0.1"
+  },
+  {
+    "id": "985dc1db-4d3b-4a90-aa06-f7bca47ecb81",
+    "username": "zeyko",
+    "firstname": "Zeyko",
+    "password": "$2a$10$pggI8ZHS2rCG1NjgfmElh.c7syjkHfoGs9jDwMYbY6sY/RiHHT76G",
+    "role": "owner",
+    "hasLicense": true,
+    "created": "2026-01-21T17:21:00.442Z",
+    "lastActivity": "2026-01-21T17:47:46.042Z",
+    "ip": "::1"
+  },
+  {
+    "id": "ed304b6e-cc6c-4969-a1b3-24132b387b6b",
+    "username": "test",
+    "firstname": "test",
+    "password": "$2a$10$Uy8FCNygWr0sOl.bqWoDguYxnIVqrOaZ8C585mLbYHEVYPeV9eGeC",
+    "role": "client",
+    "hasLicense": true,
+    "created": "2026-01-21T18:10:27.851Z",
+    "lastActivity": "2026-01-21T18:10:27.851Z",
+    "ip": "::1"
+  }
+]

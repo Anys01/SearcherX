@@ -1,0 +1,27 @@
+[
+  {
+    "id": "a21e4419-5b2c-4196-b6b3-5aa6302870e6",
+    "name": "Bouygues",
+    "label": "Source #1",
+    "filename": "boursous",
+    "icon": "fas fa-phone",
+    "description": "Base de données télécom",
+    "status": "public",
+    "category": "télécom",
+    "recordCount": 0,
+    "lastUpdate": "2026-01-21T18:10:17.946Z"
+  },
+  {
+    "id": "b9324ae1-22b1-4d3c-b31a-6a75a8d86e7c",
+    "name": "zeyko.csv",
+    "label": "ZEYKO DB",
+    "filename": "zeyko",
+    "icon": "fas fa-database",
+    "description": "Base de données zeyko.csv",
+    "status": "public",
+    "category": "général",
+    "recordCount": 0,
+    "lastUpdate": "2026-01-21T18:24:19.692Z",
+    "createdBy": "admin"
+  }
+]

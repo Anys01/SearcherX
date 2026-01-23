@@ -1,0 +1,20 @@
+{
+  "owner": [
+    "search",
+    "wanted",
+    "admin",
+    "bank",
+    "export",
+    "import",
+    "settings",
+    "logs"
+  ],
+  "admin": [
+    "search",
+    "wanted",
+    "admin"
+  ],
+  "client": [
+    "search"
+  ]
+}

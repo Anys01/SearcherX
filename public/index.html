@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEARCHX - Recherche Avancée</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div id="login-screen">
+        <div class="login-container">
+            <div class="login-header">
+                <h1><i class="fas fa-search"></i> SEARCHX</h1>
+                <p>Recherche Avancée - Accès Restreint</p>
+            </div>
+            
+            <div class="login-error" id="login-error">
+                Identifiants incorrects
+            </div>
+            
+            <div class="input-group">
+                <label>Nom d'utilisateur</label>
+                <input type="text" id="username" placeholder="Entrez votre nom d'utilisateur">
+            </div>
+            
+            <div class="input-group">
+                <label>Mot de passe</label>
+                <input type="password" id="password" placeholder="Entrez votre mot de passe">
+            </div>
+            
+            <button class="login-btn" id="login-btn">
+                <i class="fas fa-sign-in-alt"></i>
+                Se connecter
+            </button>
+        </div>
+    </div>
+
+    <div id="app">
+        <div class="container">
+            <aside class="sidebar">
+                <div class="logo">
+                    <h1><i class="fas fa-search"></i> SEARCHX</h1>
+                </div>
+                
+                <div class="nav-section">Navigation</div>
+                <ul class="nav-links">
+                    <li><a href="#" class="active" data-page="dashboard"><i class="fas fa-home"></i> Accueil</a></li>
+                    <li><a href="#" data-page="wanted"><i class="fas fa-exclamation-triangle"></i> Wanted</a></li>
+                    <li><a href="#" data-page="services"><i class="fas fa-server"></i> Services</a></li>
+                </ul>
+                
+                <div class="nav-section">Compte</div>
+                <ul class="nav-links">
+                    <li><a href="#" data-page="settings"><i class="fas fa-cog"></i> Paramètres</a></li>
+                </ul>
+                
+                <div class="nav-section admin-section-nav" style="display: none;">Administration</div>
+                <ul class="nav-links admin-links" style="display: none;">
+                    <li><a href="#" data-page="admin-panel"><i class="fas fa-shield-alt"></i> Admin Panel</a></li>
+                </ul>
+                
+                <div class="user-info">
+                    <div class="user-avatar" id="user-avatar">U</div>
+                    <div class="user-details">
+                        <h4 id="user-name">Utilisateur</h4>
+                        <p id="user-role">Client</p>
+                    </div>
+                    <div class="user-menu">
+                        <button class="user-menu-btn" id="user-menu-btn" onclick="toggleUserMenu()">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <div class="user-dropdown" id="user-dropdown">
+                            <a href="#" class="user-dropdown-item" onclick="showPage('settings')">
+                                <i class="fas fa-cog"></i>
+                                <span>Paramètres</span>
+                            </a>
+                            <a href="#" class="user-dropdown-item" onclick="copyProfileLink()">
+                                <i class="fas fa-link"></i>
+                                <span>Copier lien profil</span>
+                            </a>
+                            <div class="user-dropdown-item" style="border-top: 1px solid var(--border); margin-top: 5px; padding-top: 15px;">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <button onclick="logout()" style="background: none; border: none; color: inherit; cursor: pointer; text-align: left; width: 100%;">
+                                    Se déconnecter
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="main-content">
+                <div id="announcement-banner" class="announcement-banner" style="display: none;">
+                    <div class="announcement-content">
+                        <div class="announcement-title" id="announcement-title"></div>
+                        <div class="announcement-text" id="announcement-text"></div>
+                    </div>
+                    <button class="announcement-close" onclick="closeAnnouncement()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <div class="search-header">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="main-search" placeholder="Rechercher une personne, un numéro, une adresse... (min. 3 caractères)">
+                    </div>
+                </div>
+
+                <div id="dashboard" class="page active">
+                    <div class="welcome-section">
+                        <h1>Bienvenue, <span id="welcome-name">Utilisateur</span></h1>
+                        <p>Explorez + de 500 databases en un seul endroit. Recherchez des personnes, numéros, adresses et bien plus encore avec <strong>SEARCHX</strong>.</p>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="color: #3b82f6;">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <h3>+500</h3>
+                            <p>DATABASES</p>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="color: #f97316;">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h3>100%</h3>
+                            <p>SÉCURISÉ</p>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="color: #ffffff;">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <h3>24/7</h3>
+                            <p>DISPONIBLE</p>
+                        </div>
+                    </div>
+                    
+                    <div class="connection-status">
+                        <p><i class="fas fa-user"></i> <span id="connected-user">Utilisateur</span> Connecté</p>
+                    </div>
+                </div>
+
+                <div id="search-results" class="page">
+                    <div class="results-header">
+                        <div class="results-count" id="results-count">Aucun résultat</div>
+                    </div>
+                    <div class="results-content" id="results-container">
+                        <div class="no-results">
+                            <i class="fas fa-search"></i>
+                            <p>Commencez une recherche pour voir des résultats</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="settings" class="page">
+                    <div class="settings-tabs">
+                        <button class="tab-btn active" data-tab="account">Compte</button>
+                        <button class="tab-btn" data-tab="appearance">Apparence</button>
+                    </div>
+                    
+                    <div id="account-tab" class="tab-content active">
+                        <div class="settings-section">
+                            <h3>Informations du compte</h3>
+                            <div class="info-row">
+                                <div class="info-label">Nom d'utilisateur</div>
+                                <div class="info-value" id="settings-username">-</div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Prénom</div>
+                                <div class="info-value" id="settings-firstname">-</div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Grade</div>
+                                <div class="info-value" id="settings-role">-</div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h3>Statut de la licence</h3>
+                            <div class="info-row">
+                                <div class="info-label">État de la licence</div>
+                                <div class="info-value" id="settings-license">-</div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h3>Changer le mot de passe</h3>
+                            <div class="form-group">
+                                <label>Nouveau mot de passe</label>
+                                <input type="password" id="new-password" placeholder="Entrez un nouveau mot de passe">
+                            </div>
+                            <div class="form-group">
+                                <label>Confirmer le mot de passe</label>
+                                <input type="password" id="confirm-password" placeholder="Confirmez le mot de passe">
+                            </div>
+                            <button class="btn btn-primary" onclick="changePassword()">
+                                <i class="fas fa-save"></i> Changer le mot de passe
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="appearance-tab" class="tab-content">
+                        <div class="settings-section">
+                            <h3><i class="fas fa-palette"></i> Palette de couleurs</h3>
+                            <p>Choisissez votre thème de couleur principal</p>
+                            <div class="color-palette">
+                                <div class="color-option color-default selected">Défaut</div>
+                                <div class="color-option color-blue">Bleu</div>
+                                <div class="color-option color-green">Vert</div>
+                                <div class="color-option color-purple">Violet</div>
+                                <div class="color-option color-orange">Orange</div>
+                                <div class="color-option color-pink">Rose</div>
+                                <div class="color-option color-red">Rouge</div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h3><i class="fas fa-adjust"></i> Thème clair/sombre</h3>
+                            <p>Basculer entre le mode clair et sombre</p>
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 15px;">
+                                <div>
+                                    <div><strong>Mode actuel</strong></div>
+                                    <div style="color: var(--text-secondary); font-size: 12px;">Utilisez le bouton ci-contre pour changer</div>
+                                </div>
+                                <label style="display: flex; align-items: center; gap: 10px;">
+                                    <input type="checkbox" id="theme-toggle" checked>
+                                    <span style="font-size: 14px;">Sombre</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="admin-panel" class="page">
+                    <div class="admin-section">
+                        <h2><i class="fas fa-database"></i> Gestion des DB</h2>
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nom</th>
+                                    <th>Label</th>
+                                    <th>Fichier</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="db-table"></tbody>
+                        </table>
+                        <button class="btn btn-primary" style="margin-top: 15px;" onclick="openModal('add-db-modal')">
+                            <i class="fas fa-plus"></i> Ajouter une DB
+                        </button>
+                    </div>
+                    
+                    <div class="admin-section">
+                        <h2><i class="fas fa-users"></i> Gestion des Utilisateurs</h2>
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nom d'utilisateur</th>
+                                    <th>Prénom</th>
+                                    <th>Grade</th>
+                                    <th>Statut Licence</th>
+                                    <th>Dernière activité</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table"></tbody>
+                        </table>
+                        <button class="btn btn-primary" style="margin-top: 15px;" onclick="openModal('add-user-modal')">
+                            <i class="fas fa-plus"></i> Ajouter un utilisateur
+                        </button>
+                    </div>
+                    
+                    <div class="admin-section">
+                        <h2><i class="fas fa-bullhorn"></i> Gestion des Annonces</h2>
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Titre</th>
+                                    <th>Contenu</th>
+                                    <th>Date de début</th>
+                                    <th>Date de fin</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="announcements-table"></tbody>
+                        </table>
+                        <button class="btn btn-primary" style="margin-top: 15px;" onclick="openModal('add-announcement-modal')">
+                            <i class="fas fa-plus"></i> Créer une annonce
+                        </button>
+                    </div>
+                    
+                    <!-- MODIFICATION: Section Permissions améliorée -->
+                    <div class="admin-section">
+                        <h2><i class="fas fa-key"></i> Gestion des Permissions</h2>
+                        <p>Utilisez le bouton ci-dessous pour gérer les permissions par grade avec le nouveau système à cases multiples</p>
+                        <button class="btn-admin" onclick="openPermissionsModal()">
+                            <i class="fas fa-cogs"></i> Gérer les permissions
+                        </button>
+                        <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--border);">
+                            <h4 style="margin-bottom: 10px; color: var(--accent);"><i class="fas fa-info-circle"></i> Nouveau système de permissions</h4>
+                            <p style="color: var(--text-secondary); font-size: 13px; line-height: 1.5;">
+                                Le nouveau système permet de sélectionner plusieurs permissions simultanément pour chaque grade.<br>
+                                Cliquez sur le bouton ci-dessus pour accéder à l'interface améliorée.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="admin-section">
+                        <h2><i class="fas fa-server"></i> Gestion Serveur</h2>
+                        <div class="form-group">
+                            <label>Rechercher un utilisateur avec ID de compte</label>
+                            <input type="text" id="user-search" placeholder="ID de compte">
+                            <button class="btn btn-primary" style="margin-top: 10px;" onclick="searchUserById()">
+                                <i class="fas fa-search"></i> Rechercher
+                            </button>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px;">
+                            <button class="btn btn-outline" onclick="showLogs('general')">
+                                <i class="fas fa-file-alt"></i> Logs Généraux
+                            </button>
+                            <button class="btn btn-outline" onclick="showLogs('admin')">
+                                <i class="fas fa-user-shield"></i> Logs Administration
+                            </button>
+                            <button class="btn btn-outline" onclick="showLogs('search')">
+                                <i class="fas fa-search"></i> Logs Search
+                            </button>
+                            <button class="btn btn-outline" onclick="showLogs('auth')">
+                                <i class="fas fa-user"></i> Logs Authentification
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- NOUVELLE SECTION: Statistiques admin -->
+                    <div class="admin-section">
+                        <h2><i class="fas fa-chart-bar"></i> Statistiques</h2>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                            <div class="stats-card">
+                                <div class="stats-header">
+                                    <div class="stats-icon" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div>
+                                        <div class="stats-value" id="stats-users">0</div>
+                                        <div class="stats-label">Utilisateurs</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="stats-card">
+                                <div class="stats-header">
+                                    <div class="stats-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
+                                        <i class="fas fa-database"></i>
+                                    </div>
+                                    <div>
+                                        <div class="stats-value" id="stats-databases">0</div>
+                                        <div class="stats-label">Databases</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="stats-card">
+                                <div class="stats-header">
+                                    <div class="stats-icon" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">
+                                        <i class="fas fa-bullhorn"></i>
+                                    </div>
+                                    <div>
+                                        <div class="stats-value" id="stats-announcements">0</div>
+                                        <div class="stats-label">Annonces</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline" style="margin-top: 15px;" onclick="refreshAdminStats()">
+                            <i class="fas fa-sync-alt"></i> Actualiser les statistiques
+                        </button>
+                    </div>
+                </div>
+
+                <div id="wanted-page" class="page">
+                    <div class="welcome-section">
+                        <h2><i class="fas fa-exclamation-triangle"></i> Wanted - Personnes Recherchées</h2>
+                        <p>Consultez les personnes recherchées et soumettez vos informations pour aider</p>
+                    </div>
+                    
+                    <div class="search-bar" style="max-width: 400px; margin-bottom: 30px;">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="wanted-search" placeholder="Rechercher un wanted...">
+                    </div>
+                    
+                    <div class="settings-section" style="text-align: center; padding: 40px;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: #f59e0b; margin-bottom: 20px;"></i>
+                        <h3 style="margin-bottom: 10px;">Aucun wanted actif pour le moment</h3>
+                        <p style="color: var(--text-secondary);">Aucune personne recherchée n'est actuellement enregistrée dans le système.</p>
+                    </div>
+                </div>
+
+                <div id="license-required" class="page">
+                    <div class="license-content">
+                        <div class="license-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h2>Accès restreint</h2>
+                        <h3>Licence requise</h3>
+                        <p>Vous devez disposer d'une licence active pour accéder au dashboard</p>
+                        <p>Votre compte <strong id="license-username">zeyko</strong> ne dispose pas de licence active.</p>
+                        <p>Pour obtenir une licence, veuillez contacter un administrateur.</p>
+                        
+                        <div class="license-actions">
+                            <button class="btn btn-danger" onclick="logout()">
+                                <i class="fas fa-sign-out-alt"></i> Se déconnecter
+                            </button>
+                            <button class="btn btn-primary">
+                                <i class="fab fa-discord"></i> Rejoindre Discord
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modals existants -->
+    <div class="modal" id="add-db-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Ajouter une Database</div>
+                <button class="modal-close" onclick="closeModal('add-db-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Nom de la DB</label>
+                    <input type="text" id="db-name" placeholder="Ex: Boursous">
+                </div>
+                <div class="form-group">
+                    <label>Label</label>
+                    <input type="text" id="db-label" placeholder="Ex: Source #1">
+                </div>
+                <div class="form-group">
+                    <label>Nom du fichier (sans extension)</label>
+                    <input type="text" id="db-filename" placeholder="Ex: boursous">
+                    <small style="color: var(--text-secondary);">Le fichier doit exister dans le dossier db/ (ex: boursous.json)</small>
+                </div>
+                <div class="form-group">
+                    <label>Statut</label>
+                    <select id="db-status">
+                        <option value="public">Publique</option>
+                        <option value="private">Privée</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('add-db-modal')">Annuler</button>
+                <button class="btn btn-primary" onclick="addDatabase()">Ajouter</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="add-user-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Ajouter un utilisateur</div>
+                <button class="modal-close" onclick="closeModal('add-user-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Nom d'utilisateur</label>
+                    <input type="text" id="user-add-username" placeholder="Ex: jean123">
+                </div>
+                <div class="form-group">
+                    <label>Prénom</label>
+                    <input type="text" id="user-add-firstname" placeholder="Ex: Jean">
+                </div>
+                <div class="form-group">
+                    <label>Mot de passe</label>
+                    <input type="password" id="user-add-password" placeholder="Mot de passe">
+                </div>
+                <div class="form-group">
+                    <label>Grade</label>
+                    <select id="user-add-role">
+                        <option value="client">Client</option>
+                        <option value="admin">Admin</option>
+                        <option value="owner">Owner</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Licence</label>
+                    <select id="user-add-license">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('add-user-modal')">Annuler</button>
+                <button class="btn btn-primary" onclick="addUser()">Ajouter</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="add-announcement-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Créer une annonce</div>
+                <button class="modal-close" onclick="closeModal('add-announcement-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Titre</label>
+                    <input type="text" id="announcement-title-input" placeholder="Ex: Maintenance planifiée">
+                </div>
+                <div class="form-group">
+                    <label>Contenu</label>
+                    <textarea id="announcement-content-input" rows="4" placeholder="Contenu de l'annonce..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Date de début</label>
+                    <input type="datetime-local" id="announcement-start-input">
+                </div>
+                <div class="form-group">
+                    <label>Date de fin</label>
+                    <input type="datetime-local" id="announcement-end-input">
+                </div>
+                <div class="form-group">
+                    <label>Statut</label>
+                    <select id="announcement-status">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('add-announcement-modal')">Annuler</button>
+                <button class="btn btn-primary" onclick="addAnnouncement()">Créer</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="logs-modal">
+        <div class="modal-content" style="max-width: 900px;">
+            <div class="modal-header">
+                <div class="modal-title">Logs du système</div>
+                <button class="modal-close" onclick="closeModal('logs-modal')">&times;</button>
+            </div>
+            <div class="modal-body" id="logs-content" style="max-height: 500px; overflow-y: auto;"></div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('logs-modal')">Fermer</button>
+                <button class="btn btn-primary" onclick="exportLogs()">Exporter</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nouveaux modals ajoutés -->
+    <div class="modal" id="user-created-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Utilisateur créé avec succès</div>
+                <button class="modal-close" onclick="closeModal('user-created-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <i class="fas fa-check-circle" style="font-size: 48px; color: #10b981;"></i>
+                    <h3 style="margin: 15px 0 10px;">Utilisateur créé</h3>
+                    <p>L'utilisateur a été créé avec succès. Copiez le message Discord ci-dessous.</p>
+                </div>
+                
+                <div id="discord-message-content" style="
+                    background: rgba(255,255,255,0.05);
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    padding: 15px;
+                    font-family: 'Courier New', monospace;
+                    font-size: 12px;
+                    line-height: 1.5;
+                    max-height: 300px;
+                    overflow-y: auto;
+                    white-space: pre-wrap;
+                    word-break: break-word;
+                "></div>
+                
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button class="btn btn-outline" onclick="closeModal('user-created-modal')">
+                        <i class="fas fa-times"></i> Fermer
+                    </button>
+                    <button class="discord-copy-btn" onclick="copyDiscordMessage()">
+                        <i class="fab fa-discord"></i> Copier message Discord
+                    </button>
+                    <button class="btn btn-primary" onclick="copyCredentials()">
+                        <i class="fas fa-copy"></i> Copier identifiants
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="permissions-modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <div class="modal-title">Gestion des Permissions</div>
+                <button class="modal-close" onclick="closeModal('permissions-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Grade</label>
+                    <select id="permissions-rank" onchange="loadPermissionsForRank()">
+                        <option value="owner">Owner</option>
+                        <option value="admin">Admin</option>
+                        <option value="client">Client</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Permissions disponibles</label>
+                    <div class="permissions-grid" id="permissions-container">
+                        <!-- Les cases à cocher seront générées ici -->
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button class="btn btn-outline" onclick="closeModal('permissions-modal')">
+                        Annuler
+                    </button>
+                    <button class="btn btn-primary" onclick="saveMultiplePermissions()">
+                        <i class="fas fa-save"></i> Enregistrer les permissions
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOUVEAU MODAL: Édition d'utilisateur -->
+    <div class="modal" id="edit-user-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Modifier l'utilisateur</div>
+                <button class="modal-close" onclick="closeModal('edit-user-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="edit-user-id">
+                <div class="form-group">
+                    <label>Nom d'utilisateur</label>
+                    <input type="text" id="edit-user-username" placeholder="Ex: jean123">
+                </div>
+                <div class="form-group">
+                    <label>Prénom</label>
+                    <input type="text" id="edit-user-firstname" placeholder="Ex: Jean">
+                </div>
+                <div class="form-group">
+                    <label>Grade</label>
+                    <select id="edit-user-role">
+                        <option value="client">Client</option>
+                        <option value="admin">Admin</option>
+                        <option value="owner">Owner</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Licence</label>
+                    <select id="edit-user-license">
+                        <option value="true">Active</option>
+                        <option value="false">Inactive</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Nouveau mot de passe (laisser vide pour ne pas changer)</label>
+                    <input type="password" id="edit-user-password" placeholder="Nouveau mot de passe">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('edit-user-modal')">Annuler</button>
+                <button class="btn btn-primary" onclick="saveUserChanges()">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOUVEAU MODAL: Édition de database -->
+    <div class="modal" id="edit-db-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Modifier la Database</div>
+                <button class="modal-close" onclick="closeModal('edit-db-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="edit-db-id">
+                <div class="form-group">
+                    <label>Nom de la DB</label>
+                    <input type="text" id="edit-db-name" placeholder="Ex: Boursous">
+                </div>
+                <div class="form-group">
+                    <label>Label</label>
+                    <input type="text" id="edit-db-label" placeholder="Ex: Source #1">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="edit-db-description" rows="2" placeholder="Description de la base de données"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Statut</label>
+                    <select id="edit-db-status">
+                        <option value="public">Publique</option>
+                        <option value="private">Privée</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Catégorie</label>
+                    <select id="edit-db-category">
+                        <option value="général">Général</option>
+                        <option value="télécom">Télécom</option>
+                        <option value="bancaire">Bancaire</option>
+                        <option value="social">Réseaux sociaux</option>
+                        <option value="gouvernement">Gouvernement</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('edit-db-modal')">Annuler</button>
+                <button class="btn btn-primary" onclick="saveDatabaseChanges()">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOUVEAU MODAL: Édition d'annonce -->
+    <div class="modal" id="edit-announcement-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Modifier l'annonce</div>
+                <button class="modal-close" onclick="closeModal('edit-announcement-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="edit-announcement-id">
+                <div class="form-group">
+                    <label>Titre</label>
+                    <input type="text" id="edit-announcement-title" placeholder="Ex: Maintenance planifiée">
+                </div>
+                <div class="form-group">
+                    <label>Contenu</label>
+                    <textarea id="edit-announcement-content" rows="4" placeholder="Contenu de l'annonce..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Date de début</label>
+                    <input type="datetime-local" id="edit-announcement-start">
+                </div>
+                <div class="form-group">
+                    <label>Date de fin</label>
+                    <input type="datetime-local" id="edit-announcement-end">
+                </div>
+                <div class="form-group">
+                    <label>Statut</label>
+                    <select id="edit-announcement-status">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('edit-announcement-modal')">Annuler</button>
+                <button class="btn btn-primary" onclick="saveAnnouncementChanges()">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <div class="toast-content">
+            <div class="toast-icon" id="toast-icon"></div>
+            <div class="toast-message" id="toast-message"></div>
+            <button class="toast-close" onclick="hideToast()">&times;</button>
+        </div>
+    </div>
+
+    <script src="/app.js"></script>
+</body>
+</html>

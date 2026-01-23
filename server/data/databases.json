@@ -1,0 +1,38 @@
+[
+  {
+    "id": "bouygues-001",
+    "name": "Bouygues Telecom",
+    "label": "Source #1",
+    "filename": "boursous",
+    "icon": "fas fa-phone",
+    "description": "Base de données clients Bouygues",
+    "status": "public",
+    "category": "télécom",
+    "recordCount": 12500,
+    "lastUpdate": "2024-01-15"
+  },
+  {
+    "id": "gtanew-002",
+    "name": "GTA New",
+    "label": "Source #30",
+    "filename": "gtanew",
+    "icon": "fas fa-gamepad",
+    "description": "Base de données joueurs GTA",
+    "status": "public",
+    "category": "gaming",
+    "recordCount": 8500,
+    "lastUpdate": "2024-01-10"
+  },
+  {
+    "id": "ffhandball-003",
+    "name": "FF Handball",
+    "label": "Source #2",
+    "filename": "ffhandball",
+    "icon": "fas fa-baseball-ball",
+    "description": "Base de données Fédération Handball",
+    "status": "private",
+    "category": "sport",
+    "recordCount": 3200,
+    "lastUpdate": "2024-01-05"
+  }
+]

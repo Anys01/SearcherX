@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: searchx
+    env: node
+    buildCommand: npm install
+    startCommand: node server/index.js  # ou server/server.js selon ton fichier
+    envVars:
+      - key: NODE_ENV
+        value: production
+    healthCheckPath: /

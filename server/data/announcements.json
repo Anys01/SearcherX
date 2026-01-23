@@ -1,0 +1,12 @@
+[
+  {
+    "id": "5dcd23be-ad39-4a15-8e96-39653e36eace",
+    "title": "Maintenance",
+    "content": "une maintenance est en cours",
+    "start": "2026-01-21T19:00",
+    "end": "2026-01-21T20:00",
+    "status": "active",
+    "createdBy": "admin",
+    "createdAt": "2026-01-21T18:10:55.110Z"
+  }
+]
